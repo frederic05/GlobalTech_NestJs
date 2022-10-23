@@ -1,11 +1,12 @@
 import { Global, Module } from '@nestjs/common';
 import { TodoController } from './todo.controller';
+import { TodoService } from './todo.service';
 
 @Global()
 @Module({
   imports: [],
   exports: [],
   controllers: [TodoController],
-  providers: [],
+  providers: [TodoService],
 })
 export class TodoModule {}
