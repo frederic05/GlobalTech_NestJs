@@ -3,7 +3,9 @@ import {
   Controller,
   Delete,
   Get,
+  HttpStatus,
   Param,
+  ParseIntPipe,
   Post,
   Put,
   Query,
@@ -12,6 +14,7 @@ import { TodoService } from './todo.service';
 import { AddUserDto } from './dto/addUserDto';
 import { GetItemDto } from './dto/getItemDto';
 import { User } from './userIterface';
+import { UpperFusionPipe } from 'src/pipes/upper-fusion.pipe';
 
 @Controller('todo')
 export class TodoController {
@@ -23,9 +26,16 @@ export class TodoController {
   }
 
   @Get('/:id')
-  getTodoId(@Param() mesParam) {
-    const { id } = mesParam;
-    return this.todoService.getTodoId(+id);
+  getTodoId(
+    @Param(
+      'id',
+      new ParseIntPipe({
+        errorHttpStatusCode: HttpStatus.NOT_FOUND,
+      }),
+    )
+    id: number,
+  ) {
+    return this.todoService.getTodoId(id);
   }
 
   //Query params
@@ -41,12 +51,26 @@ export class TodoController {
   }
 
   @Delete(':id')
-  suprimeUser(@Param() idParam) {
-    return this.todoService.suprimeUser(+idParam);
+  suprimeUser(
+    @Param(
+      'id',
+      new ParseIntPipe({
+        errorHttpStatusCode: HttpStatus.NOT_FOUND,
+      }),
+    )
+    id: number,
+  ) {
+    return this.todoService.suprimeUser(id);
   }
 
   @Put(':id')
-  updateTodo(@Param() iddex, @Body() newTodo: Partial<AddUserDto>) {
-    return this.todoService.updateTodo(+iddex, newTodo);
+  updateTodo(@Param('iddex') iddex, @Body() newTodo: Partial<AddUserDto>) {
+    console.log(iddex);
+    return this.todoService.updateTodo(iddex, newTodo);
+  }
+
+  @Post('pipe')
+  testPipile(@Body(UpperFusionPipe) data) {
+    return data;
   }
 }

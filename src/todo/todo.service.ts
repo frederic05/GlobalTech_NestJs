@@ -35,21 +35,24 @@ export class TodoService {
         id = 1;
       }
 
-      return {
+      const todo = {
         id,
         name,
         age,
         email,
       };
+
+      this.userTodo.push(todo);
+      return todo;
     } catch (error) {
       console.log('ERROR', error);
     }
   }
 
-  suprimeUser(idParam: number) {
-    const index = this.userTodo.findIndex((e) => e.id === idParam);
+  suprimeUser(id: number) {
+    const index = this.userTodo.findIndex((e) => e.id === id);
     if (index >= 1) {
-      this.userTodo.splice(index, 1);
+      this.userTodo.splice(index);
     } else {
       throw new NotFoundException('utilisateur introuvable');
     }
